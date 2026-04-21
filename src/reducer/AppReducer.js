@@ -1,54 +1,39 @@
-const MovieReducer = (state, action) => {
+export const AppReducer = (state, action) => {
   switch (action.type) {
-    case "SET_MOVIES":
+    case "INITIAL_DATA":
       return {
         ...state,
-        movies: Array.isArray(action.payload) ? action.payload : [],
-        loading: false,
+        orders: action.payload,
       };
 
-    case "ADD_MOVIE":
+    case "DELETE_ITEM":
       return {
         ...state,
-        movies: [...state.movies, action.payload],
-      };
-
-    case "TOGGLE_WATCHED":
-      return {
-        ...state,
-        movies: state.movies.map((m) =>
-          m.id === action.payload && typeof m.watched === "boolean"
-            ? { ...m, watched: !m.watched }
-            : m,
+        orders: state.orders.filter(
+          (o) => o.orderId !== action.payload
         ),
       };
 
-    case "TOGGLE_FAVORITE":
+    case "TOGGLE_STATUS":
       return {
         ...state,
-        movies: state.movies.map((m) =>
-          m.id === action.payload && typeof m.favorite === "boolean"
-            ? { ...m, favorite: !m.favorite }
-            : m,
+        orders: state.orders.map((o) =>
+          o.orderId === action.payload
+            ? {
+                ...o,
+                status:
+                  o.status === "Delivered"
+                    ? "Cancelled"
+                    : "Delivered",
+              }
+            : o
         ),
       };
 
-    case "DELETE_MOVIE":
-      return {
-        ...state,
-        movies: state.movies.filter((m) => m.id !== action.payload),
-      };
-
-    case "SET_FAVORITES":
-      return {
-        ...state,
-        favorites: state.movies.filter((m) => m.favorite === true),
-      };
+    case "SET_FILTER":
+      return { ...state, filter: action.payload };
 
     default:
-      console.warn("Unknown action:", action.type);
       return state;
   }
 };
-
-export default MovieReducer;
