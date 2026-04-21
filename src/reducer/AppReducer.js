@@ -1,10 +1,7 @@
 export const AppReducer = (state, action) => {
   switch (action.type) {
     case "INITIAL_DATA":
-      return {
-        ...state,
-        orders: action.payload,
-      };
+      return { ...state, orders: action.payload };
 
     case "DELETE_ITEM":
       return {
